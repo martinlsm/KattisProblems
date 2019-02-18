@@ -26,6 +26,5 @@ unsigned int nbr_of_swaps(string seq) {     // Ändra till referens (&) ??
     stack<unsigned int> qmarks = question_mark_indices(seq);
     sum_swaps += set_and_swap_current('0', qmarks, seq);
     sum_swaps += set_and_swap_current('1', qmarks, seq);
-
-    return sum_swaps;
+    return sum_swaps % 1000000007;
 }
