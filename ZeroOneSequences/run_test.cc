@@ -19,7 +19,7 @@ int main() {
         string input = get_input("test/" + std::to_string(i) + ".in");
         unsigned int expected = std::stoi(
                 get_input("test/" + std::to_string(i) + ".expected"));
-        unsigned int actual = nbr_of_swaps(input);
+        unsigned int actual = nbr_swaps(input);
         if (actual != expected) {
             std::cout << "Output differs for file " << i << "\n";
             std::cout << "  Expected = " << expected << "\n";

@@ -2,29 +2,39 @@
 #include <stack>
 
 using std::string;
-using std::stack;
+using uint = unsigned int;
 
-unsigned int swap_determined_nbrs(string& seq) {
-    return 0;
+void swap(uint from, uint to, string& seq) {
+	while (to < from) {
+		char temp = seq[from];
+		seq[from] = seq[from - 1];
+		seq[from - 1] = temp;
+		from--;
+	}
 }
 
-stack<unsigned int> question_mark_indices(const string& seq) {
-    return stack<unsigned int>{};
+uint nbr_swaps(uint i, uint ones_start, uint current_cost, string& seq) {
+	uint sum = current_cost;
+	while (i < seq.size()) {
+		if (seq[i] == '0') {
+			if (ones_start < i) {
+				sum += i - ones_start;
+				swap(ones_start, i, seq);
+			}
+			ones_start++;
+		} else if (seq[i] == '?') {
+			string s0 = seq;
+			s0[i] = '0';
+			string s1 = seq;
+			s1[i] = '1';
+			return sum + nbr_swaps(i, ones_start, sum, s0)
+					+ nbr_swaps(i, ones_start, sum, s1);
+		}
+	i++;
+	}
+	return sum;
 }
 
-unsigned int set_and_swap_current(const char set_to,
-                                  stack<unsigned int> qmarks,
-                                  string& seq) {
-    // Restore sequence before returning
-    // Restore stack before returning
-    return 0;
-}
-
-unsigned int nbr_of_swaps(string seq) {     // Ändra till referens (&) ??
-    unsigned int sum_swaps{0};
-    sum_swaps += swap_determined_nbrs(seq);
-    stack<unsigned int> qmarks = question_mark_indices(seq);
-    sum_swaps += set_and_swap_current('0', qmarks, seq);
-    sum_swaps += set_and_swap_current('1', qmarks, seq);
-    return sum_swaps % 1000000007;
+uint nbr_swaps(string seq) {
+	return nbr_swaps(0, 0, 0, seq);
 }
