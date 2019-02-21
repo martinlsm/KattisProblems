@@ -17,9 +17,9 @@ string get_input(const string& filename) {
 int main() {
     for (unsigned int i = 1; i <= N_TESTS; i++) {
         string input = get_input("test/" + std::to_string(i) + ".in");
-        unsigned int expected = std::stoi(
+        unsigned long expected = std::stoi(
                 get_input("test/" + std::to_string(i) + ".expected"));
-        unsigned int actual = nbr_swaps(input);
+        unsigned long actual = nbr_swaps(input);
         if (actual != expected) {
             std::cout << "Output differs for file " << i << "\n";
             std::cout << "  Expected = " << expected << "\n";

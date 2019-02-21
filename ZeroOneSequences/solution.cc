@@ -3,6 +3,7 @@
 
 using std::string;
 using uint = unsigned int;
+using ulong = unsigned long;
 
 void swap(uint from, uint to, string& seq) {
 	while (to < from) {
@@ -13,8 +14,8 @@ void swap(uint from, uint to, string& seq) {
 	}
 }
 
-uint nbr_swaps(uint i, uint ones_start, uint current_cost, string& seq) {
-	uint sum = current_cost;
+ulong nbr_swaps(uint i, uint ones_start, ulong current_cost, string& seq) {
+	ulong sum = current_cost;
 	while (i < seq.size()) {
 		if (seq[i] == '0') {
 			if (ones_start < i) {
@@ -35,13 +36,15 @@ uint nbr_swaps(uint i, uint ones_start, uint current_cost, string& seq) {
 	return sum;
 }
 
-uint nbr_swaps(string seq) {
+ulong nbr_swaps(string& seq) {
 	return nbr_swaps(0, 0, 0, seq) % 1000000007;
 }
+
 
 int main() {
 	string input;
 	std::cin >> input;
 	std::cout << nbr_swaps(input) << std::endl;
 }
+
 
