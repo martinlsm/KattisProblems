@@ -1,5 +1,5 @@
 #include <string>
-#include <stack>
+#include <iostream>
 
 using std::string;
 using uint = unsigned int;
@@ -27,8 +27,8 @@ uint nbr_swaps(uint i, uint ones_start, uint current_cost, string& seq) {
 			s0[i] = '0';
 			string s1 = seq;
 			s1[i] = '1';
-			return sum + nbr_swaps(i, ones_start, sum, s0)
-					+ nbr_swaps(i, ones_start, sum, s1);
+			return nbr_swaps(i, ones_start, sum, s0)
+			     + nbr_swaps(i, ones_start, sum, s1);
 		}
 	i++;
 	}
@@ -36,5 +36,12 @@ uint nbr_swaps(uint i, uint ones_start, uint current_cost, string& seq) {
 }
 
 uint nbr_swaps(string seq) {
-	return nbr_swaps(0, 0, 0, seq);
+	return nbr_swaps(0, 0, 0, seq) % 1000000007;
 }
+
+int main() {
+	string input;
+	std::cin >> input;
+	std::cout << nbr_swaps(input) << std::endl;
+}
+

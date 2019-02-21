@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "solution.h"
+#include "solution.cc"
 
 const unsigned int N_TESTS = 10;
 
