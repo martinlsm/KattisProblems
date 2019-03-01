@@ -5,46 +5,37 @@ using std::string;
 using uint = unsigned int;
 using ulong = unsigned long;
 
-void swap(uint from, uint to, string& seq) {
-	while (to < from) {
-		char temp = seq[from];
-		seq[from] = seq[from - 1];
-		seq[from - 1] = temp;
-		from--;
-	}
+ulong nbr_swaps(const string*);
+ulong f(uint, uint, ulong, const string*);
+ulong f0(uint, uint, ulong, const string*);
+
+ulong nbr_swaps(const string* seq) {
+	return f(0, 0, 0, seq) % 1000000007;
 }
 
-ulong nbr_swaps(uint i, uint ones_start, ulong current_cost, string& seq) {
-	ulong sum = current_cost;
-	while (i < seq.size()) {
-		if (seq[i] == '0') {
-			if (ones_start < i) {
-				sum += i - ones_start;
-				swap(ones_start, i, seq);
-			}
+ulong f(uint i, uint ones_start, ulong current_cost, const string* seq) {
+	while (i < seq->size()) {
+		if ((*seq)[i] == '0') {
+			current_cost += i - ones_start;
 			ones_start++;
-		} else if (seq[i] == '?') {
-			string s0 = seq;
-			s0[i] = '0';
-			string s1 = seq;
-			s1[i] = '1';
-			return nbr_swaps(i, ones_start, sum, s0)
-			     + nbr_swaps(i, ones_start, sum, s1);
+		} else if ((*seq)[i] == '?') {
+			return f0(i, ones_start, current_cost, seq) + // Assuming seq[i] == 0
+			       f(i+1, ones_start, current_cost, seq); // Assuming seq[i] == 1
 		}
-	i++;
+		i++;
 	}
-	return sum;
+	return current_cost;
 }
 
-ulong nbr_swaps(string& seq) {
-	return nbr_swaps(0, 0, 0, seq) % 1000000007;
+ulong f0(uint i, uint ones_start, ulong current_cost, const string* seq) {
+	current_cost += i - ones_start;
+	ones_start++;
+	return f(i+1, ones_start, current_cost, seq);
 }
 
 
 int main() {
 	string input;
 	std::cin >> input;
-	std::cout << nbr_swaps(input) << std::endl;
+	std::cout << nbr_swaps(&input) << std::endl;
 }
-
-

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "solution.cc"
+#include "linear_solution.cc"
 
 const unsigned int N_TESTS = 10;
 
