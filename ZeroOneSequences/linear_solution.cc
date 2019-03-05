@@ -7,6 +7,7 @@ using std::vector;
 using ulong = unsigned long;
 using uint = unsigned int;
 
+ulong MOD_WRAP = 1000000007;
 
 void zeros_and_qs(uint v[2], const string& seq) {
 	for (uint i = 0; i < seq.size(); i++) {
@@ -30,9 +31,10 @@ ulong binomial(uint n, uint k) {
 ulong jumps_for_one(uint total_q, uint zeros_left, uint qs_left) {
 	ulong sum = 0;
 	for (uint k = 1; k <= qs_left; k++) {
-		sum += k * binomial(qs_left, k);
+		sum = (sum + k * binomial(qs_left, k)) % MOD_WRAP;
 	}
-	sum += zeros_left * std::pow(2, total_q);
+	sum = (sum * static_cast<ulong>(std::pow(2, total_q - qs_left))) % MOD_WRAP;
+	sum = (sum + zeros_left * static_cast<ulong>(std::pow(2, total_q))) % MOD_WRAP;
 	return sum;
 }
 
@@ -45,27 +47,25 @@ ulong nbr_swaps(const string& seq) {
 	zeros_and_qs(z_q, seq);
 	uint ql = z_q[1];
 	uint zl = z_q[0];
-	std::cout << ql << ", " << zl << std::endl;
 	ulong sumswaps = 0;
 	uint total_q = ql;
 	for (uint i = 0; i < seq.size() - 1; i++) {
 		if (seq[i] == '1') {
-			sumswaps += jumps_for_one(total_q, zl, ql);
+			sumswaps = (sumswaps + jumps_for_one(total_q, zl, ql)) % MOD_WRAP;
 		} else if (seq[i] == '?') {
 			ql -= 1;
-			sumswaps += jumps_for_q(total_q, zl, ql);
+			sumswaps = (sumswaps + jumps_for_q(total_q, zl, ql)) % MOD_WRAP;
 		} else {
 			zl -= 1;
 		}
 	}
-	return sumswaps % 1000000007;
+	return sumswaps % MOD_WRAP;
 }
 
 
 int main() {
-	string input{"???"};
-	// std::cin >> input;
+	string input;
+	std::cin >> input;
 	std::cout << nbr_swaps(input) << std::endl;
 }
-
 
