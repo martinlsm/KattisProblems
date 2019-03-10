@@ -1,41 +1,59 @@
+#include <vector>
 #include <string>
+#include <algorithm>
 #include <iostream>
 
+using std::vector;
 using std::string;
-using uint = unsigned int;
-using ulong = unsigned long;
 
-ulong nbr_swaps(const string*);
-ulong f(uint, uint, ulong, const string*);
-ulong f0(uint, uint, ulong, const string*);
+ulong MOD = 1000000007;
+ulong INV_2 = 500000004;
 
-ulong nbr_swaps(const string* seq) {
-	return f(0, 0, 0, seq) % 1000000007;
-}
-
-ulong f(uint i, uint ones_start, ulong current_cost, const string* seq) {
-	while (i < seq->size()) {
-		if ((*seq)[i] == '0') {
-			current_cost += i - ones_start;
-			ones_start++;
-		} else if ((*seq)[i] == '?') {
-			return f0(i, ones_start, current_cost, seq) + // Assuming seq[i] == 0
-			       f(i+1, ones_start, current_cost, seq); // Assuming seq[i] == 1
-		}
-		i++;
+vector<ulong> two_pows(ulong Q) {
+	vector<ulong> p;
+	ulong curr = 1;
+	for (ulong i = 0; i <= Q; i++) {
+		p.push_back(curr);
+		curr = (curr * 2) % MOD;
 	}
-	return current_cost;
+	return p;
 }
 
-ulong f0(uint i, uint ones_start, ulong current_cost, const string* seq) {
-	current_cost += i - ones_start;
-	ones_start++;
-	return f(i+1, ones_start, current_cost, seq);
+vector<ulong> z1(const string& seq, ulong Q) { 
+	vector<ulong> p = two_pows(Q);
+	vector<ulong> zs;
+	for (ulong i = 0; i <= seq.size(); i++)
+		zs.push_back(0);
+	for (long i = seq.size() - 1; i >= 0; --i) {
+		if (seq[i] == '0') {
+			zs[i] = (zs[i+1] + p[Q]) % MOD;
+		} else if (seq[i] == '1') {
+			zs[i] = zs[i+1];
+		} else { // ?
+			zs[i] = (zs[i+1] + p[Q-1]) % MOD;
+		}
+	}
+	return zs;
 }
 
+ulong num_swaps(const string& seq) {
+	ulong Q = std::count(seq.begin(), seq.end(), '?');
+	vector<ulong> z = z1(seq, Q);
+	ulong sum{0};
+	for (ulong i = 0; i < seq.size(); i++) {
+		if (seq[i] == '1') {
+			sum = (sum + ((2 * z[i+1]) % MOD)) % MOD;	
+		} else if (seq[i] == '?') {
+			sum = (sum + z[i+1]) % MOD;
+		}
+	}
+	return (sum * INV_2) % MOD;
+}
 
+/*
 int main() {
 	string input;
 	std::cin >> input;
-	std::cout << nbr_swaps(&input) << std::endl;
+	std::cout << num_swaps(input) << std::endl;
 }
+*/

@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
-#include "linear_solution.cc"
+#include "solution.cc"
 
-const unsigned int N_TESTS = 10;
+const unsigned int N_TESTS = 13;
 
 using std::string;
 
@@ -19,7 +19,7 @@ int main() {
         string input = get_input("test/" + std::to_string(i) + ".in");
         unsigned long expected = std::stoi(
                 get_input("test/" + std::to_string(i) + ".expected"));
-        unsigned long actual = nbr_swaps(input);
+        unsigned long actual = num_swaps(input);
         if (actual != expected) {
             std::cout << "Output differs for file " << i << "\n";
             std::cout << "  Expected = " << expected << "\n";
