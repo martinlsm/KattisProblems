@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-using mazepoint = std::pair<int, int>;
+using mazepoint = std::pair<uint, uint>;
 using dirmap = std::map<mazepoint, bool[4]>;
 using dir = char;
 
