@@ -66,7 +66,7 @@ Maze load_png(std::string filename) {
 	for (uint x = 1; x < w - 1; x += 2) {
 		for (uint y = 1; y < h - 1; y += 2) {
 			if (white(img, x, y, w) || blue(img, x, y, w)) {
-				std::vector<char> dirs{0, 0, 0, 0}; // Wall=0, Path=1, Exit=2
+				std::vector<char> dirs{0, 0, 0, 0}; // Wall=0, Path=1, Exit=2, Taken=3
 				dirs[EAST]  = !black(img, x+1, y, w) + red(img, x+1, y, w);
 				dirs[NORTH] = !black(img, x, y-1, w) + red(img, x, y-1, w);
 				dirs[WEST]  = !black(img, x-1, y, w) + red(img, x-1, y, w);
@@ -84,7 +84,7 @@ Maze load_png(std::string filename) {
 }
 
 std::string Maze::moveplayer(dir d) {
-	char statusahead = playerpos->second[d];
+	char& statusahead = playerpos->second[d];
 	if (statusahead != 0) {
 		int currX = playerpos->first.first;
 		int currY = playerpos->first.second;
@@ -108,8 +108,12 @@ std::string Maze::moveplayer(dir d) {
 		case 0:
 			return "wall";
 		case 1:
+			statusahead = 3;
 			return "ok";
 		case 2:
 			return "solved";
+		case 3:
+			return "wrong";
 	}
+	throw "Invalid direction data";
 }
