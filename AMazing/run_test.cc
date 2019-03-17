@@ -1,7 +1,8 @@
-#include "solution.h"
 #include <vector>
 #include <string>
 #include <fstream>
+#include "solution.h"
+#include "maze_loader.h"
 
 using std::vector;
 using std::string;

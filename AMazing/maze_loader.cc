@@ -7,7 +7,12 @@
 
 using std::vector;
 
-Maze::Maze(dirmap dm, mazepoint mp, dir d) : cells(dm), exitcell(mp), exitdir(d) { }
+Maze::Maze(dirmap dm, mazepoint start) : cells(dm) {
+	playerpos = cells.find(start);
+	if (playerpos == cells.end()) {
+		throw "Invalid start point";
+	}
+}
 
 Maze::~Maze() { }
 
@@ -57,26 +62,54 @@ Maze load_png(std::string filename) {
 	}
 
 	dirmap cells;
+	mazepoint start;
 	for (uint x = 1; x < w - 1; x += 2) {
 		for (uint y = 1; y < h - 1; y += 2) {
-			if (white(img, x, y, w)) {
+			if (white(img, x, y, w) || blue(img, x, y, w)) {
+				std::vector<char> dirs{0, 0, 0, 0}; // Wall=0, Path=1, Exit=2
+				dirs[EAST]  = !black(img, x+1, y, w) + red(img, x+1, y, w);
+				dirs[NORTH] = !black(img, x, y-1, w) + red(img, x, y-1, w);
+				dirs[WEST]  = !black(img, x-1, y, w) + red(img, x-1, y, w);
+				dirs[SOUTH] = !black(img, x, y+1, w) + red(img, x, y+1, w);
+
 				mazepoint p = std::make_pair(x/2, y/2);
-				bool dirs[4];
-				dirs[EAST]  = !black(img, x+1, y, w);
-				dirs[NORTH] = !black(img, x, y-1, w);
-				dirs[WEST]  = !black(img, x-1, y, w);
-				dirs[SOUTH] = !black(img, x, y+1, w);
-				auto pair = std::make_pair(p, dirs);
-				cells.insert(pair);
+				cells.insert({p, dirs});
+				if (blue(img, x, y, w)) {
+					start = p;
+				}
 			}
 		}
 	}
-
-	mazepoint exitcell;
-	dir exitdir = 0;
-	return Maze(cells, exitcell, exitdir);
+	return Maze(cells, start);
 }
 
-int main() {
-	load_png("testimport.png");
+std::string Maze::moveplayer(dir d) {
+	char statusahead = playerpos->second[d];
+	if (statusahead != 0) {
+		int currX = playerpos->first.first;
+		int currY = playerpos->first.second;
+		switch (d) {
+			case EAST:
+				++currX;
+				break;
+			case NORTH:
+				--currY;
+				break;
+			case WEST:
+				--currX;
+				break;
+			case SOUTH:
+				++currY;
+				break;
+		}
+		playerpos = cells.find({currX, currY});
+	}
+	switch (statusahead) {
+		case 0:
+			return "wall";
+		case 1:
+			return "ok";
+		case 2:
+			return "solved";
+	}
 }
