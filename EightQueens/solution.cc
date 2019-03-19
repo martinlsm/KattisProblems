@@ -44,13 +44,22 @@ board parse_input(std::istream& is) {
 	board b;
 	for (int i = 0; i < 8; i++) {
 		std::getline(is, line);
-		b.push_back(line.find("*"));
+		size_t pos = line.find("*");
+		if (pos == string::npos) {
+			throw string{"invalid"};
+		}
+		b.push_back(pos);
 	}
 	return b;
 }
 
 void solve(std::istream& is, std::ostream& os) {
-	board b = parse_input(is);
-	string output = num_collisions(b) == 0 ? "valid"  : "invalid";
-	os << output << std::endl;
+	try {
+		board b = parse_input(is);
+		string output = num_collisions(b) == 0 ? "valid"  : "invalid";
+		os << output << std::endl;
+	} catch (string s) {
+		os << s << std::endl;
+		return;
+	}
 }
