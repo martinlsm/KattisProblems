@@ -1,0 +1,6 @@
+run_test
+main_stdin
+testlist
+*.o
+submission.cc
+test/*.out
