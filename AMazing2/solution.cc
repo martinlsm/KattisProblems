@@ -46,7 +46,7 @@ int main() {
 			std::cout << "no way out" << std::endl;
 			break;			
 		}
-		size_t rand_dir = rand() % dirsleft.size();	
+		size_t rand_dir = dirsleft[rand() % dirsleft.size()];
 		currpos->second[rand_dir] = true;
 		std::cout << dir_str(rand_dir) << std::endl;
 		string judge_response;
