@@ -1,11 +1,8 @@
 #include <vector>
 #include <stack>
-#include <assert.h>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-
-#define DEBUG
 
 using namespace std;
 
@@ -87,16 +84,6 @@ void Vertex::print() {
 	cout << s << "," << e << ":";
 	for (Vertex* c : children)
 		c->print();
-}
-
-void debug_print(Vertex* v) {
-	cout << "\t" << v->s << "\t" << v->e << "\t" << v->len << "\n";
-	for (Vertex* c : v->children)
-		debug_print(c);
-}
-
-bool Vertex::update_tree() {
-	return false;
 }
 
 vector<Vertex*> parse_trees(string s) {
