@@ -14,7 +14,7 @@ def parse_operator(op):
     elif op == '*':
         return lambda x,y,z : x * y == z
     elif op == '/':
-        return lambda x,y,z : y * z == x
+        return lambda x,y,z : y * z == x and y != 0
 
 def valid_bases(expr):
     expr = expr.split(' ')
