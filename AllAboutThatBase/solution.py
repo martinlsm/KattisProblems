@@ -30,7 +30,7 @@ def valid_bases(expr):
         s1 = eval(sym1, b)
         s2 = eval(sym2, b)
         a = eval(ans, b)
-        res[b - 1] = op(s1, s2, a)
+        res[b - 1] = s1 < 2**32 and s2 < 2**32 and op(s1, s2, a)
     bases = ''.join(str(symbols[i+1]) if v else '' for i,v in enumerate(res))
     if bases == '':
         return 'invalid'
