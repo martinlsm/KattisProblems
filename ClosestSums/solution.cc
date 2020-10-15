@@ -19,8 +19,6 @@ int main() {
 		}
 
 		// insert padding
-		nums.push_back(-10e8);
-		nums.push_back(10e8);
 		sort(nums.begin(), nums.end());
 
 		cout << "Case " << ++case_count << ":\n";
@@ -30,8 +28,8 @@ int main() {
 			cin >> query;
 
 			int p1, p2;
-			p2 = 2;
-			while (2 * nums[p2] < query) {
+			p2 = 1;
+			while ((size_t)p2 < nums.size() - 1 && 2 * nums[p2] < query) {
 				p2++;
 			}
 			p1 = p2 - 1;
@@ -40,20 +38,23 @@ int main() {
 			while (true) {
 				int n1 = nums[p1];
 				int n2 = nums[p2];
-				int n1_next = nums[p1 - 1];
-				int n2_next = nums[p2 + 1];
 
 				if (abs(n1 + n2 - query) < abs(closest - query)) {
 					closest = n1 + n2;
 				}
 
-				if (abs(n1_next + n2 - query) < abs(n1 + n2_next - query)) {
+				bool change = false;
+				if (n1 + n2 > query) {
+					change = true;
 					p1--;
-					if (p1 == 0) break;
-				} else {
+					if (p1 == -1) break;
+				} else if (n1 + n2 < query) {
+					change = true;
 					p2++;
-					if ((size_t)p2 == nums.size() - 1) break;
+					if ((size_t)p2 == nums.size()) break;
 				}
+
+				if (!change) break;
 			}
 			cout << "Closest sum to " << query << " is " << closest << ".\n";
 		}
